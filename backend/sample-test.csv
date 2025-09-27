@@ -1,0 +1,6 @@
+id,name,email,age,salary,department
+1,John Doe,john.doe@email.com,28,50000,Engineering
+2,Jane Smith,jane.smith@email.com,32,60000,Marketing
+3,Bob Johnson,,35,70000,Sales
+4,Alice Brown,alice.brown@email.com,abc,55000,HR
+5,Charlie Wilson,charlie.wilson@email.com,29,,Engineering

@@ -1,0 +1,11 @@
+id,name,email,age,salary,department
+1,John Doe,john.doe@email.com,28,50000,Engineering
+2,Jane Smith,jane.smith@email.com,32,60000,Marketing  
+3,Bob Johnson,,35,70000,Sales
+4,Alice Brown,alice.brown@email.com,abc,55000,HR
+5,Charlie Wilson,charlie.wilson@email.com,29,,Engineering
+6,Diana Davis,diana.davis@email.com,41,65000,Finance
+7,Eve Thompson,invalid-email,33,58000,Marketing
+8,Frank Miller,frank.miller@email.com,27,52000,Engineering
+9,Grace Lee,grace.lee@email.com,38,72000,Sales
+10,Henry Clark,henry.clark@email.com,45,80000,Management
