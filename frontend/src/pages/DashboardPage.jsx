@@ -1,30 +1,49 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { 
-  Upload, 
-  Database, 
-  AlertCircle, 
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Upload,
+  Database,
+  AlertCircle,
   BarChart3,
   FileText,
   CheckCircle,
   TrendingUp,
-  Activity
-} from 'lucide-react';
-import { Card, Button, Badge, EmptyState, LoadingSpinner } from '../components/ui';
-import { useApi } from '../hooks';
-import { dataAPI, errorsAPI } from '../services/api';
-import { formatNumber, formatDate } from '../utils/helpers';
+  Activity,
+  MessageCircle,
+  Shield,
+  Clock,
+  Zap,
+  GitMerge,
+} from "lucide-react";
+import {
+  Card,
+  Button,
+  Badge,
+  EmptyState,
+  LoadingSpinner,
+} from "../components/ui";
+import { useApi } from "../hooks";
+import { dataAPI, errorsAPI } from "../services/api";
+import { formatNumber, formatDate } from "../utils/helpers";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  
-  const { data: dataSummary, loading: dataLoading } = useApi(dataAPI.getSummary, [], {
-    onError: (error) => console.error('Error fetching data summary:', error)
-  });
-  
-  const { data: errorSummary, loading: errorLoading } = useApi(errorsAPI.getSummary, [], {
-    onError: (error) => console.error('Error fetching error summary:', error)
-  });
+
+  const { data: dataSummary, loading: dataLoading } = useApi(
+    dataAPI.getSummary,
+    [],
+    {
+      onError: (error) => console.error("Error fetching data summary:", error),
+    }
+  );
+
+  const { data: errorSummary, loading: errorLoading } = useApi(
+    errorsAPI.getSummary,
+    [],
+    {
+      onError: (error) => console.error("Error fetching error summary:", error),
+    }
+  );
 
   const isLoading = dataLoading || errorLoading;
 
@@ -38,68 +57,111 @@ export default function DashboardPage() {
 
   const stats = [
     {
-      name: 'Total Documents',
+      name: "Total Documents",
       value: dataSummary?.data?.summary?.totalDocuments || 0,
-      change: '+12%',
-      changeType: 'increase',
+      change: "+12%",
+      changeType: "increase",
       icon: FileText,
-      color: 'bg-blue-500'
+      color: "bg-blue-500",
     },
     {
-      name: 'Clean Records',
+      name: "Clean Records",
       value: formatNumber(dataSummary?.data?.summary?.totalRecords || 0),
-      change: '+5.4%',
-      changeType: 'increase',
+      change: "+5.4%",
+      changeType: "increase",
       icon: Database,
-      color: 'bg-green-500'
+      color: "bg-green-500",
     },
     {
-      name: 'Total Errors',
+      name: "Total Errors",
       value: formatNumber(errorSummary?.data?.summary?.totalErrors || 0),
-      change: '-2.1%',
-      changeType: 'decrease',
+      change: "-2.1%",
+      changeType: "decrease",
       icon: AlertCircle,
-      color: 'bg-red-500'
+      color: "bg-red-500",
     },
     {
-      name: 'Avg Records/Doc',
+      name: "Avg Records/Doc",
       value: dataSummary?.data?.summary?.averageRecordsPerDocument || 0,
-      change: '+3.2%',
-      changeType: 'increase',
+      change: "+3.2%",
+      changeType: "increase",
       icon: TrendingUp,
-      color: 'bg-purple-500'
-    }
+      color: "bg-purple-500",
+    },
+    {
+      name: "Data Quality Score",
+      value: `${Math.round(
+        (1 -
+          (errorSummary?.data?.summary?.totalErrors || 0) /
+            (dataSummary?.data?.summary?.totalRecords || 1)) *
+          100
+      )}%`,
+      change: "+1.2%",
+      changeType: "increase",
+      icon: Shield,
+      color: "bg-indigo-500",
+    },
+    {
+      name: "Processing Time",
+      value: "2.3s avg",
+      change: "-0.5s",
+      changeType: "decrease",
+      icon: Clock,
+      color: "bg-cyan-500",
+    },
+    {
+      name: "Active Jobs",
+      value: "0",
+      change: "Stable",
+      changeType: "neutral",
+      icon: Zap,
+      color: "bg-emerald-500",
+    },
   ];
 
   const quickActions = [
     {
-      title: 'Upload Files',
-      description: 'Process new data files',
+      title: "Upload Files",
+      description: "Process new data files",
       icon: Upload,
-      action: () => navigate('/upload'),
-      color: 'bg-primary-500 hover:bg-primary-600'
+      action: () => navigate("/upload"),
+      color: "bg-primary-500 hover:bg-primary-600",
     },
     {
-      title: 'View Clean Data',
-      description: 'Browse processed records',
+      title: "View Clean Data",
+      description: "Browse processed records",
       icon: Database,
-      action: () => navigate('/data'),
-      color: 'bg-green-500 hover:bg-green-600'
+      action: () => navigate("/data"),
+      color: "bg-green-500 hover:bg-green-600",
     },
     {
-      title: 'Check Errors',
-      description: 'Review data issues',
+      title: "Merge Data",
+      description: "Combine multiple files",
+      icon: GitMerge,
+      action: () => navigate("/merge"),
+      color: "bg-indigo-500 hover:bg-indigo-600",
+    },
+    {
+      title: "Check Errors",
+      description: "Review data issues",
       icon: AlertCircle,
-      action: () => navigate('/errors'),
-      color: 'bg-red-500 hover:bg-red-600'
+      action: () => navigate("/errors"),
+      color: "bg-red-500 hover:bg-red-600",
     },
     {
-      title: 'View Insights',
-      description: 'Analyze trends and patterns',
+      title: "View Insights",
+      description: "Analyze trends and patterns",
       icon: BarChart3,
-      action: () => navigate('/insights'),
-      color: 'bg-orange-500 hover:bg-orange-600'
-    }
+      action: () => navigate("/insights"),
+      color: "bg-orange-500 hover:bg-orange-600",
+    },
+    {
+      title: "Chat with Data",
+      description: "Ask questions about your data",
+      icon: MessageCircle,
+      action: () => navigate("/chatbot"),
+      color: "bg-purple-500 hover:bg-purple-600",
+    },
   ];
 
   return (
@@ -129,12 +191,14 @@ export default function DashboardPage() {
               </div>
               <div className="ml-4 flex-1">
                 <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+                <p className="text-2xl font-semibold text-gray-900">
+                  {stat.value}
+                </p>
               </div>
             </div>
             <div className="mt-4 flex items-center">
-              <Badge 
-                variant={stat.changeType === 'increase' ? 'success' : 'info'}
+              <Badge
+                variant={stat.changeType === "increase" ? "success" : "info"}
                 className="text-xs"
               >
                 {stat.change}
@@ -147,7 +211,9 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">
+          Quick Actions
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action) => (
             <button
@@ -168,20 +234,25 @@ export default function DashboardPage() {
         {/* Recent Uploads */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Uploads</h2>
-            <Button 
-              variant="secondary" 
+            <h2 className="text-lg font-semibold text-gray-900">
+              Recent Uploads
+            </h2>
+            <Button
+              variant="secondary"
               size="small"
-              onClick={() => navigate('/data')}
+              onClick={() => navigate("/data")}
             >
               View All
             </Button>
           </div>
-          
+
           {dataSummary?.data?.recentUploads?.length > 0 ? (
             <div className="space-y-3">
               {dataSummary.data.recentUploads.map((upload) => (
-                <div key={upload._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div
+                  key={upload._id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
                       <FileText className="w-5 h-5 text-primary-600" />
@@ -200,7 +271,7 @@ export default function DashboardPage() {
                       {upload.fileType.toUpperCase()}
                     </Badge>
                     <p className="text-gray-500 text-xs">
-                      {formatDate(upload.uploadDate, 'relative')}
+                      {formatDate(upload.uploadDate, "relative")}
                     </p>
                   </div>
                 </div>
@@ -212,7 +283,7 @@ export default function DashboardPage() {
               title="No recent uploads"
               description="Upload your first file to get started"
               action={
-                <Button onClick={() => navigate('/upload')}>
+                <Button onClick={() => navigate("/upload")}>
                   Upload Files
                 </Button>
               }
@@ -222,18 +293,23 @@ export default function DashboardPage() {
 
         {/* File Type Distribution */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">File Type Distribution</h2>
-          
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            File Type Distribution
+          </h2>
+
           {dataSummary?.data?.fileTypeStats?.length > 0 ? (
             <div className="space-y-3">
               {dataSummary.data.fileTypeStats.map((stat) => (
-                <div key={stat._id} className="flex items-center justify-between">
+                <div
+                  key={stat._id}
+                  className="flex items-center justify-between"
+                >
                   <div className="flex items-center space-x-3">
                     <Badge variant="info" className="text-xs font-mono">
                       {stat._id.toUpperCase()}
                     </Badge>
                     <span className="text-sm text-gray-600">
-                      {stat.count} {stat.count === 1 ? 'file' : 'files'}
+                      {stat.count} {stat.count === 1 ? "file" : "files"}
                     </span>
                   </div>
                   <span className="text-sm font-medium text-gray-900">
@@ -256,8 +332,12 @@ export default function DashboardPage() {
       <Card>
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">System Status</h2>
-            <p className="text-sm text-gray-500 mt-1">All services are operational</p>
+            <h2 className="text-lg font-semibold text-gray-900">
+              System Status
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              All services are operational
+            </p>
           </div>
           <div className="flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-success-500" />
@@ -265,6 +345,110 @@ export default function DashboardPage() {
           </div>
         </div>
       </Card>
+
+      {/* Data Quality Monitoring */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Quality Metrics */}
+        <Card>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Data Quality Metrics
+          </h2>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">
+                Validation Success Rate
+              </span>
+              <span className="font-semibold text-green-600">
+                {dataSummary?.data?.summary?.totalRecords > 0
+                  ? Math.round(
+                      ((dataSummary.data.summary.totalRecords -
+                        (errorSummary?.data?.summary?.totalErrors || 0)) /
+                        dataSummary.data.summary.totalRecords) *
+                        100
+                    )
+                  : 100}
+                %
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Error Rate</span>
+              <span className="font-semibold text-red-600">
+                {dataSummary?.data?.summary?.totalRecords > 0
+                  ? Math.round(
+                      ((errorSummary?.data?.summary?.totalErrors || 0) /
+                        dataSummary.data.summary.totalRecords) *
+                        100
+                    )
+                  : 0}
+                %
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">
+                Files Processed Today
+              </span>
+              <span className="font-semibold text-blue-600">
+                {dataSummary?.data?.summary?.totalDocuments || 0}
+              </span>
+            </div>
+          </div>
+        </Card>
+
+        {/* Recent Alerts */}
+        <Card>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Recent Alerts
+          </h2>
+          {errorSummary?.data?.recentErrors?.length > 0 ? (
+            <div className="space-y-3">
+              {errorSummary.data.recentErrors.slice(0, 3).map((error) => (
+                <div
+                  key={error._id}
+                  className="flex items-start space-x-3 p-3 bg-red-50 rounded-lg"
+                >
+                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-red-800 truncate">
+                      {error.errorType}
+                    </p>
+                    <p className="text-xs text-red-600 mt-1">
+                      {formatDate(error.createdAt, "relative")}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
+              <p className="text-sm text-gray-600">No recent alerts</p>
+            </div>
+          )}
+        </Card>
+
+        {/* Processing Performance */}
+        <Card>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Processing Performance
+          </h2>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Avg Processing Time</span>
+              <span className="font-semibold text-gray-900">2.3s</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Throughput</span>
+              <span className="font-semibold text-gray-900">1.2 MB/s</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Queue Status</span>
+              <Badge variant="success" className="text-xs">
+                Empty
+              </Badge>
+            </div>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }

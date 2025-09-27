@@ -1,5 +1,5 @@
-const path = require('path');
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 
 class FileUtils {
   static getFileExtension(filename) {
@@ -7,7 +7,16 @@ class FileUtils {
   }
 
   static isValidFileType(filename) {
-    const supportedTypes = ['pdf', 'csv', 'json', 'xml', 'png', 'jpg', 'jpeg'];
+    const supportedTypes = [
+      "pdf",
+      "csv",
+      "json",
+      "xml",
+      "xlsx",
+      "png",
+      "jpg",
+      "jpeg",
+    ];
     const ext = this.getFileExtension(filename);
     return supportedTypes.includes(ext);
   }
@@ -33,7 +42,7 @@ class FileUtils {
         return true;
       }
     } catch (error) {
-      console.error('Error deleting file:', error);
+      console.error("Error deleting file:", error);
     }
     return false;
   }
